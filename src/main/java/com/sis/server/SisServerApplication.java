@@ -6,8 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class SisServerApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(SisServerApplication.class, args);
-	}
-
+  public static void main(String[] args) {
+    SpringApplication.run(SisServerApplication.class, args);
+  }
 }
