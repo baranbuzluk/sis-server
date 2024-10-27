@@ -26,6 +26,12 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.hibernate.validator:hibernate-validator:7.0.5.Final'
+    implementation 'jakarta.validation:jakarta.validation-api:3.0.0'
+    // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+    // https://mvnrepository.com/artifact/commons-codec/commons-codec
+    implementation 'commons-codec:commons-codec:1.17.1'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -47,10 +53,5 @@ spotless {
         googleJavaFormat()
         removeUnusedImports()
         target 'src/**/*.java'
-    }
-
-    kotlin {
-        ktlint("0.45.2")
-        target 'src/**/*.kt'
     }
 }
