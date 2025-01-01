@@ -1,7 +1,7 @@
 package com.sis.server;
 
-import com.sis.server.entity.AuthorityType;
 import com.sis.server.entity.User;
+import com.sis.server.entity.UserType;
 import com.sis.server.repository.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,31 +20,18 @@ class DatabaseInitializer implements ApplicationRunner {
 
   @Override
   public void run(ApplicationArguments args) {
-    userRepository.saveAllAndFlush(List.of(createStudent(), createTeacher(), createAdmin()));
+    User student = createUser("1", UserType.STUDENT);
+    User teacher = createUser("teacher@school.edu", UserType.TEACHER);
+    User admin = createUser("admin@school.edu", UserType.TEACHER);
+    userRepository.saveAllAndFlush(List.of(student, teacher, admin));
     log.info("Database initialized.");
   }
 
-  private User createStudent() {
+  private User createUser(String username, UserType type) {
     User user = new User();
-    user.setStudentNumber(1);
-    user.setAuthorityType(AuthorityType.STUDENT);
-    user.setPassword(passwordEncoder.encode("Example1!2024"));
-    return user;
-  }
-
-  private User createTeacher() {
-    User user = new User();
-    user.setAuthorityType(AuthorityType.TEACHER);
-    user.setEmail("teacher@school.edu");
-    user.setPassword(passwordEncoder.encode("Secure$Pass123"));
-    return user;
-  }
-
-  private User createAdmin() {
-    User user = new User();
-    user.setAuthorityType(AuthorityType.ADMIN);
-    user.setEmail("admin@school.edu");
-    user.setPassword(passwordEncoder.encode("NewYear#2024$"));
+    user.setUsername(username);
+    user.setUserType(type);
+    user.setPassword(passwordEncoder.encode("Mypassw0rd!"));
     return user;
   }
 }

@@ -19,10 +19,10 @@ public class LoginEndpointTest {
   public static final String URL = "http://localhost:8080/auth/login";
   @Autowired TestRestTemplate restTemplate;
 
-  private void performLoginTest(String username, String password) {
+  private void performLoginTest(String username) {
     LoginRequest requestBody = new LoginRequest();
     requestBody.setUsername(username);
-    requestBody.setPassword(password);
+    requestBody.setPassword("Mypassw0rd!");
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
@@ -42,22 +42,20 @@ public class LoginEndpointTest {
   @DisplayName("Student Login Operation")
   void shouldReturnJWTToken_whenValidStudentCredentialsAreProvided() {
     String studentNumber = "1";
-    String password = "Example1!2024";
-    performLoginTest(studentNumber, password);
+    performLoginTest(studentNumber);
   }
 
   @Test
   @DisplayName("Teacher Login Operation")
   void shouldReturnJWTToken_whenValidTeacherCredentialsAreProvided() {
     String mail = "teacher@school.edu";
-    String password = "Secure$Pass123";
-    performLoginTest(mail, password);
+    performLoginTest(mail);
   }
 
   @Test
   @DisplayName("Admin Login Operation")
   void shouldReturnJWTToken_whenValidAdminCredentialsAreProvided() {
     String mail = "admin@school.edu";
-    performLoginTest(mail, "NewYear#2024$");
+    performLoginTest(mail);
   }
 }

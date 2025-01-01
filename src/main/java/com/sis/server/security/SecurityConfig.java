@@ -1,5 +1,6 @@
 package com.sis.server.security;
 
+import com.sis.server.entity.User;
 import com.sis.server.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -69,12 +71,9 @@ public class SecurityConfig {
   @Bean
   UserDetailsService userDetailsService() {
     return username -> {
-      try {
-        int studentNo = Integer.parseInt(username);
-        return userRepository.findByStudentNumber(studentNo);
-      } catch (NumberFormatException e) {
-        return userRepository.findByEmail(username);
-      }
+      User user = userRepository.findByUsername(username);
+      if (user == null) throw new UsernameNotFoundException(username + " not found.");
+      return user;
     };
   }
 }

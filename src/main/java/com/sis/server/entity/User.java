@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity(name = "users")
+@Table(indexes = @Index(name = "username_index", columnList = "username"))
 @Setter
 @Getter
 public class User implements UserDetails {
@@ -16,28 +17,32 @@ public class User implements UserDetails {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  @Column(unique = true)
-  private Integer studentNumber;
+  @Column(unique = true, nullable = false)
+  private String username;
 
+  @Column(nullable = false)
   private String password;
 
-  @Column(unique = true)
-  private String email;
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private UserType userType;
 
   @Enumerated(EnumType.STRING)
-  private AuthorityType authorityType;
+  @Column(nullable = false)
+  private UserStatus status = UserStatus.ACTIVE;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return authorityType == null ? Collections.emptySet() : Set.of(authorityType);
+    return userType == null ? Collections.emptySet() : Set.of(userType);
   }
 
   @Override
-  public String getUsername() {
-    if (authorityType == AuthorityType.STUDENT) {
-      final Integer studentNo = getStudentNumber();
-      return studentNo == null ? "" : getStudentNumber().toString();
-    }
-    return getEmail();
+  public boolean isEnabled() {
+    return status == UserStatus.ACTIVE;
+  }
+
+  @Override
+  public boolean isAccountNonLocked() {
+    return status != UserStatus.LOCKED;
   }
 }
